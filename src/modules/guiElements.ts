@@ -1,12 +1,17 @@
 import { fetchAllUsers } from "./restAPI";
 import { User, Post, PostInfo } from "./abstractClass";
 
+import BongoCat1 from "../images/BongoCat.png"
+import BongoCat2 from "../images/BongoCat1.png"
+import BongoCat3 from "../images/BongoCat2.png"
+
 const userLoggedIn = localStorage.getItem("userLoggedIn");
 
 const profilePicMap: Record<string, string> = {
-    pic1: "../images/BongoCat.png",
-    pic2: "../images/BongoCat1.png",
-    default: "../images/BongoCat2.png",
+    pic1: BongoCat1,
+    pic2: BongoCat2,
+    pic3: BongoCat3,
+    default: BongoCat3,
 };
 
 export async function generateUserInfo(): Promise<void> {
@@ -29,7 +34,7 @@ export async function generateUserInfo(): Promise<void> {
     });
 }
 
-export function generatePostGUI(post: Post, fetchedData: User | PostInfo, appendTo: HTMLElement): void {
+export function generatePostGUI(post: Post, fetchedData: User | PostInfo, appendTo: Element): void {
     const postElement = document.createElement("div");
     postElement.classList.add("post");
 
@@ -62,14 +67,14 @@ export function generatePostGUI(post: Post, fetchedData: User | PostInfo, append
     appendTo.append(postElement);
 }
 
-export async function generateOtherUser(clickedOrLoggedinUser: string): Promise<void> {
+export async function generateDesiredUser(desiredUser: string): Promise<void> {
     const userCard = document.querySelector(".user-card") as HTMLDivElement;
     const usernameH3 = document.querySelector(".user-card h3") as HTMLHeadingElement;
-    usernameH3.innerText = clickedOrLoggedinUser;
+    usernameH3.innerText = desiredUser;
 
     const users: User[] = await fetchAllUsers();
     users.forEach((user) => {
-        if (user && user.username === clickedOrLoggedinUser) {
+        if (user && user.username === desiredUser) {
             const userProfilePic: HTMLImageElement = document.createElement("img");
             let imgUrl: URL;
 

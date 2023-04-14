@@ -9,7 +9,7 @@ export class User {
 
 export type Post = {
     message: string;
-    timestamp: number;
+    timestamp: string;
 }
 
 export type PostInfo = {
@@ -17,4 +17,8 @@ export type PostInfo = {
     profilePic: string;
     message: string;
     timestamp: string;
+}
+
+export function loginedUser(): string | null  {
+    return localStorage.getItem("userLoggedIn")
 }
