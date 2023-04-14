@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/style.css">
+    <title>My Profile</title>
+</head>
+
+<body>
+    <section class="header">
+        <h1>Din profil</h1>
+        <div class="nav-info">
+            <button class="feed-btn">To feed</button>
+            <button class="log-out-btn">Log out</button>
+            <button id="delete-account">Delete my account</button>
+            <div id="confirm-delete-popup" class="popup">
+                <div class="popup-content">
+                    <p>Are you sure you want to delete? This change is permanent</p>
+                    <div class="popup-buttons">
+                        <button id="confirm-delete">Confirm</button>
+                        <button id="cancel-delete">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div class="user-info"></div>
+        </div>
+    </section>
+    
+    <section class="profile-container">
+        <div class="profile-posts">
+            <form id="newPostForm">
+                <input type="text" placeholder="Berätta något kul" id="new-post">
+                <button>Publicera</button>
+            </form>
+            
+            <div id="my-posts"></div>
+        </div>
+        
+        <div class="user-card">
+            <h3></h3>
+        </div>
+        
+    </section>
+    
+</body>
+<script src="../modules/profile.ts" type="module"></script>
+
+</html>
