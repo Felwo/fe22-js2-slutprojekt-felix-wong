@@ -1,30 +1,54 @@
 import { User } from "./abstractClass"
 
-const baseURL: string = 'https://socialmedia-e7c98-default-rtdb.europe-west1.firebasedatabase.app/'
+// URL för basadressen för Firebase Realtime Database API.
+const baseURL: string = 'https://socialmediaplatform-368e0-default-rtdb.europe-west1.firebasedatabase.app/'
 
+// Hämtar alla användare från Firebase Realtime Database API och konverterar dem till en array av User-objekt.
 export async function fetchAllUsers(): Promise<User[]> {
     const url: string = `${baseURL}.json`;
 
     const reponse = await fetch(url);
     const data = await reponse.json();
-    return data;
+
+    const users: User[] = []
+
+    if (data && typeof data === 'object') {
+        for (const [key, value] of Object.entries(data)) {
+            if (typeof value === 'object') {
+                const incomingUser = value as any
+                users.push({
+                    userID: key,
+                    username: incomingUser.username,
+                    password: incomingUser.password,
+                    posts: incomingUser.posts,
+                    profilePic: incomingUser.profilePic
+                })
+            }
+        }
+    }
+
+    return users;
 }
 
-export async function registerUser(obj: User, index: number): Promise<void> {
-    const url = `${baseURL}${index}.json`;
+// Registrerar en användare i Firebase Realtime Database API och returnerar det nya användar-ID:et.
+export async function registerUser(obj: User): Promise<string> {
+    const url = `${baseURL}.json`;
 
     const init = {
-        method: 'PUT',
+        method: 'POST',
         body: JSON.stringify(obj),
         headers: {
             "Content-Type": "application/json; charset=UTF-8",
         }
     };
-    await fetch(url, init);
+    return await fetch(url, init)
+        .then(res => res.json())
+        .then(user => user.name)
 }
 
-export async function deleteUser(userIndex: number): Promise<void> {
-    const url = `${baseURL}${userIndex}.json`;
+// Tar bort en användare från Firebase Realtime Database API baserat på användar-ID.
+export async function deleteUser(userID: string): Promise<void> {
+    const url = `${baseURL}${userID}.json`;
 
     const init = {
         method: 'DELETE',
@@ -33,8 +57,9 @@ export async function deleteUser(userIndex: number): Promise<void> {
     await fetch(url, init);
 }
 
-export async function postStatus(obj: {message: string, timestamp: string}, userIndex: number, postIndex: number): Promise<void> {
-    const url = `${baseURL}${userIndex}/posts/${postIndex}.json`;
+// Skickar ett nytt statusinlägg till Firebase Realtime Database API för en användare baserat på användar-ID och index för statusinlägget.
+export async function postStatus(obj: {message: string, timestamp: string}, userID: string, postIndex: number): Promise<void> {
+    const url = `${baseURL}${userID}/posts/${postIndex}.json`;
 
     const init = {
         method: 'PUT',

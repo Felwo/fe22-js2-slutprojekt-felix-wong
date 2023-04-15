@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel ./src/index.html",
-    "build": "parcel build ./src/index.html ./src/html/feed.html ./src/html/profile.html ./src/html/users.html --dist-dir docs --public-url ./",
+    "build": "parcel build ./src/index.html --dist-dir docs --public-url ./",
     "clean": "del-cli ./.parcel-cache ./docs ./dist"
   },
   "keywords": [],

@@ -1,5 +1,6 @@
 import { User } from "./abstractClass";
 
+// Kontrollerar om det givna användarnamnet och lösenordet matchar en användare i listan av användare.
 export function checkLogin(inputUsername: string, inputPassword: string, users: User[]): boolean {
     try {
         const databaseUser = users.find(user => user.username === inputUsername);
@@ -16,6 +17,7 @@ export function checkLogin(inputUsername: string, inputPassword: string, users: 
     }
 }
 
+// Tar bort den inloggade användaren från lokal lagring (local storage).
 export function logOutEvent(): void {
     localStorage.removeItem("userLoggedIn");
 }

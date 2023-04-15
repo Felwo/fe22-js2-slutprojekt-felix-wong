@@ -1,10 +1,11 @@
 import { IPage, TPageSwitcher } from "./IPage";
 import { PostInfo, User, loginedUser } from "../modules/abstractClass";
-import { fetchAllUsers, postStatus, deleteUser } from "../modules/restAPI";
+import { fetchAllUsers} from "../modules/restAPI";
 import { logOutEvent } from "../modules/eventHandler";
 import { generatePostGUI } from "../modules/guiElements";
 import { ProfilePage } from "./Profile";
 
+//Kolla LoginPage.ts för varför jag har gjort på detta sättet
 export class DashboardPage implements IPage {
     private sectionHeader: HTMLElement;
     private sectionFeed: HTMLElement;
@@ -12,7 +13,6 @@ export class DashboardPage implements IPage {
     constructor(private app: Element, private setPage: TPageSwitcher) {
         this.sectionHeader = this.renderHeader();
         this.sectionFeed = this.renderFeed();
-
     }
 
     render(): void {
@@ -24,89 +24,82 @@ export class DashboardPage implements IPage {
     }
 
     private async onOpenMyProfile() {
+        // Fetches all users and retrieves the current logged in user's username
         const users: User[] = await fetchAllUsers();
+        // If no user is logged in, redirects to the login page
         const username = loginedUser()
         if (!username) {
             this.setPage("login")
             return
         }
+        // Finds the user object that matches the logged in user's username
         const user = users.find(user => user.username === username)
         if (!user) {
             this.setPage("login")
             return
         }
+        // Redirects to the profile page for the logged in user
         this.setPage(new ProfilePage(this.app, this.setPage, user, true))
     }
 
     private onLogout(): void {
+        // Logs out the current user and redirects to the login page
         logOutEvent();
         this.setPage('login');
     }
 
     private renderHeader(): HTMLElement {
-        // create section element with class "header"
         const sectionHeader = document.createElement("section");
         sectionHeader.classList.add("header");
 
-        // create h1 element and add it to the sectionHeader
         const h1Element = document.createElement("h1");
         h1Element.textContent = "Your feed";
         sectionHeader.appendChild(h1Element);
 
-        // create section element with class "nav-info"
         const sectionNavInfo = document.createElement("section");
         sectionNavInfo.classList.add("nav-info");
 
-        // create button element with class "profile-btn" and add it to sectionNavInfo
         const buttonProfile = document.createElement("button");
         buttonProfile.classList.add("profile-btn");
         buttonProfile.textContent = "My profile";
         buttonProfile.addEventListener("click", () => this.onOpenMyProfile());
         sectionNavInfo.appendChild(buttonProfile);
 
-        // create button element with class "log-out-btn" and add it to sectionNavInfo
         const buttonLogOut = document.createElement("button");
         buttonLogOut.classList.add("log-out-btn");
         buttonLogOut.textContent = "Log out";
         buttonLogOut.addEventListener("click", () => this.onLogout());
         sectionNavInfo.appendChild(buttonLogOut);
 
-        // create section element with class "user-info" and add it to sectionNavInfo
         const sectionUserInfo = document.createElement("section");
         sectionUserInfo.classList.add("user-info");
         sectionNavInfo.appendChild(sectionUserInfo);
 
-        // add sectionNavInfo to sectionHeader
         sectionHeader.appendChild(sectionNavInfo);
 
         return sectionHeader;
     }
 
     private renderFeed(): HTMLElement {
-        // create section element with class "feed-container"
         const sectionFeedContainer = document.createElement("section");
         sectionFeedContainer.classList.add("feed-container");
 
-        // create section element with class "feed" and add it to sectionFeedContainer
         const sectionFeed = document.createElement("section");
         sectionFeed.classList.add("feed");
         sectionFeed.id = 'feed-list';
         sectionFeedContainer.appendChild(sectionFeed);
 
-        // create section element with class "all-users" and add it to sectionFeedContainer
         const sectionAllUsers = document.createElement("section");
         sectionAllUsers.classList.add("user-container");
 
-        // create h3 element with "All user(s):" text content and add it to sectionAllUsers
         const h3AllUsers = document.createElement("h3");
         h3AllUsers.textContent = "All user(s):";
         sectionAllUsers.appendChild(h3AllUsers);
 
         const userList = document.createElement("div")
-        userList.id = "all-users"
+        userList.id = "all-users";
         sectionAllUsers.appendChild(userList);
 
-        // add sectionAllUsers to sectionFeedContainer
         sectionFeedContainer.appendChild(sectionAllUsers);
 
         return sectionFeedContainer;
@@ -118,15 +111,21 @@ export class DashboardPage implements IPage {
         allUsersDiv.replaceChildren()
 
         const users: User[] = await fetchAllUsers();
+        // Create an element for each user and add it to the container
         users.forEach((user) => {
             if (user) {
                 const item = document.createElement("div");
                 const a = document.createElement("a");
+                
+                // Set the username as the link text
                 a.innerHTML = user.username
+
+                // Add an event listener to the link that opens the user's profile page when clicked
                 a.addEventListener("click",
                     () => this.setPage(
                             new ProfilePage(this.app, this.setPage, user, false)
                         )
+                                    
                     )
                 item.append(a)
                 allUsersDiv.appendChild(item)
@@ -139,9 +138,11 @@ export class DashboardPage implements IPage {
         if (!feedContainer) return;
         feedContainer.replaceChildren()
 
+        // Fetch all users from the firebase
         const allPosts: PostInfo[] = [];
         const users: User[] = await fetchAllUsers();
 
+        // Loop through each user's posts and add them to the feed
         users.forEach((user) => {
             if (user) {
                 const username = user.username;
@@ -154,10 +155,12 @@ export class DashboardPage implements IPage {
                 });
             }
         });
+        // Sort the posts by timestamp
         allPosts.sort((a, b) =>
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
 
+        // Create an element for each post and add it to the feed
         allPosts.forEach((post) => {
             generatePostGUI(post, post, feedContainer);
         });
