@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@300&display=swap');
+
+*{
+    font-family: 'Catamaran', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    background-color: rgb(240, 253, 249);
+}
+
+#app {
+    display: flex;
+    height: 98vh;
+    gap: 9rem;
+}
+
+button{
+    margin: 0.5rem;
+}
+
+img {
+    width: 100px;
+}
+
+form input{
+    margin: 0.25rem 0.5rem;
+}
+
+label:hover {
+    background-color: rgb(216, 235, 229);
+}
+
+.feed-container, .user-container, #my-posts {
+    overflow-y: scroll;
+    background-color: white;
+    padding: 0rem 1rem;
+}
+
+.feed-container {
+    width: 35%;
+    padding: 1rem 0.5rem;
+}
+
+.post {
+    outline: 3px solid rgb(216, 235, 229);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.user-container {
+    width: 20%;
+}
+
+.userNameAndPic {
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+    cursor: text;
+}
+
+#confirm-delete-popup {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: none;
+}

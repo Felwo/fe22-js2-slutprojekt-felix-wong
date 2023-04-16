@@ -73,6 +73,9 @@ export class ProfilePage implements IPage {
             const buttonDeleteAccount = document.createElement("button");
             buttonDeleteAccount.setAttribute("id", "delete-account");
             buttonDeleteAccount.textContent = "Delete my account";
+            buttonDeleteAccount.addEventListener('click', () => {
+                divConfirmDeletePopup.style.display = "block";
+            })
             divNavInfo.appendChild(buttonDeleteAccount);
 
             // create div element with id "confirm-delete-popup" and class "popup"
@@ -106,6 +109,9 @@ export class ProfilePage implements IPage {
             const buttonCancelDelete = document.createElement("button");
             buttonCancelDelete.setAttribute("id", "cancel-delete");
             buttonCancelDelete.textContent = "Cancel";
+            buttonCancelDelete.addEventListener('click', () => {
+                divConfirmDeletePopup.style.display = "none";
+            });
             divPopupButtons.appendChild(buttonCancelDelete);
 
             // add divConfirmDeletePopup to divNavInfo
@@ -128,6 +134,7 @@ export class ProfilePage implements IPage {
         const divProfilePosts = document.createElement("div");
         divProfilePosts.classList.add("profile-posts");
 
+        //Check if is your profile, if yes then render the profile
         if (this.isYourProfile) {
             const formNewPost = document.createElement("form");
             formNewPost.setAttribute("id", "newPostForm");
@@ -166,6 +173,7 @@ export class ProfilePage implements IPage {
 
     }
 
+    //Fetch all posts from database
     private async syncPosts() {
         const myPosts = document.querySelector('#my-posts') as HTMLDivElement;
         const users: User[] = await fetchAllUsers();
@@ -178,6 +186,7 @@ export class ProfilePage implements IPage {
         })
     }
 
+    //Upload on firebase and display new post
     private async publishPost() {
         const newPost: string = (document.querySelector('#new-post') as HTMLInputElement).value;
 
@@ -195,6 +204,7 @@ export class ProfilePage implements IPage {
         });
     }
 
+    //Erase user data in database and logs you out
     private async deleteMyProfile (){
         const users: User[] = await fetchAllUsers();
         const username = loginedUser()!;

@@ -7,18 +7,21 @@ import { ProfilePage } from "./Profile";
 
 //Kolla LoginPage.ts för varför jag har gjort på detta sättet
 export class DashboardPage implements IPage {
+    private dbContainer: HTMLElement;
     private sectionHeader: HTMLElement;
     private sectionFeed: HTMLElement;
+    private sectionUserList: HTMLElement;
 
     constructor(private app: Element, private setPage: TPageSwitcher) {
         this.sectionHeader = this.renderHeader();
         this.sectionFeed = this.renderFeed();
+        this.sectionUserList = this.renderUserList();
     }
 
     render(): void {
         this.app.replaceChildren();
         document.title = "Dashboard Page";
-        this.app.append(this.sectionHeader, this.sectionFeed)
+        this.app.append(this.sectionHeader, this.sectionFeed, this.sectionUserList)
         this.syncFeed()
         this.syncAllUsers()
     }
@@ -89,6 +92,10 @@ export class DashboardPage implements IPage {
         sectionFeed.id = 'feed-list';
         sectionFeedContainer.appendChild(sectionFeed);
 
+        return sectionFeedContainer;
+    }
+
+    private renderUserList(): HTMLElement {
         const sectionAllUsers = document.createElement("section");
         sectionAllUsers.classList.add("user-container");
 
@@ -100,9 +107,7 @@ export class DashboardPage implements IPage {
         userList.id = "all-users";
         sectionAllUsers.appendChild(userList);
 
-        sectionFeedContainer.appendChild(sectionAllUsers);
-
-        return sectionFeedContainer;
+        return sectionAllUsers;
     }
 
     private async syncAllUsers() {

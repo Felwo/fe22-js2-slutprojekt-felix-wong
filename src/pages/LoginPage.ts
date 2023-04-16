@@ -91,7 +91,7 @@ export class LoginPage implements IPage {
     // Private method for rendering the login form
     private renderLoginForm(): HTMLFormElement {
         const form = document.createElement('form');
-        // TODO: Add CSS class for design later
+        form.classList.add('login-form');
 
         const title = document.createElement('h2');
         title.innerHTML = 'Login';
@@ -115,7 +115,7 @@ export class LoginPage implements IPage {
     // Private method for rendering the register form
     private renderRegisterForm(): HTMLFormElement {
         const form = document.createElement('form');
-        // TODO: Add CSS class for design later
+        form.classList.add('register-form');
 
         const title = document.createElement('h2');
         title.innerHTML = 'Register user';
@@ -136,6 +136,7 @@ export class LoginPage implements IPage {
         const sectionTitle = document.createElement('h3');
         sectionTitle.innerHTML = 'Choose avatars';
         const imageContainer = document.createElement('div')
+        imageContainer.classList.add('avatars-container');
 
         //Loops through and display images as input radio 
         for (let i = 0; i < IMAGE_LIST.length; i++) {
